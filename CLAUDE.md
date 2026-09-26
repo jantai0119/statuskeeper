@@ -101,7 +101,9 @@ src/rules/load.ts           reads rules/ from disk (the only fs code)
 src/engine/dates.ts         UTC date math: days, calendar months (clamped), business days
 src/engine/timeline.ts      computeTimeline(profile, rules, today, { events, includeUnverified })
 src/engine/watch.ts         pending_changes from sources, as heads-up items
-src/app/                    Next.js App Router UI (placeholder so far)
+src/app/page.tsx           Server Component: loads + validates rules/ at build time (static page)
+src/components/            client UI: profile form, timeline, dates form, watch items
+src/components/storage.ts  the only localStorage code; also the only clock read (useToday)
 ```
 
 ## Commands
@@ -130,7 +132,17 @@ lint, typecheck and tests on every push and PR. Deploy target: Vercel.
 - Tests in `src/engine/timeline.test.ts` run the real rules with a fixed
   `today`; every expected date is worked out by hand from the rule files.
 
+## UI conventions
+
+- The page is static: rules are read at build time, the timeline is computed
+  in the browser. Keep it that way (no API routes, no server data).
+- Unverified rules are shown, always with an "Unverified" badge and the
+  banner. Rules with no monitored source say so in the card.
+- Student-facing text comes from rule `summary` / `task` / `title` and
+  pending-change `headline`. Never show maintainer `notes` or `summary` of a
+  pending change in the UI.
+
 ## Not built yet
 
-The UI (profile form in localStorage, timeline view, watch items), then the
-source watcher.
+The source watcher (re-fetch sources.yaml pages, diff, open PRs with proposed
+rule edits). Also: deploy to Vercel.

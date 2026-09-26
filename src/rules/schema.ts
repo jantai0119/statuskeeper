@@ -252,6 +252,11 @@ export function anchorsOf(c: Computation): Anchor[] {
 // ─── sources.yaml ─────────────────────────────────────────────────────────────
 
 const PendingChange = z.strictObject({
+  /** Same id on every source that reports the same change; the UI shows one item per id. */
+  id: Slug,
+  /** Plain English for students. Needed on at least one entry per id. */
+  headline: z.string().optional(),
+  /** Maintainer notes: what this particular source says about the change. */
   summary: z.string(),
   status: z.string(),
   since: IsoDate.optional(),

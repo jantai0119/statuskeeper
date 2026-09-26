@@ -179,10 +179,16 @@ describe("computeTimeline", () => {
 });
 
 describe("watchItems", () => {
-  it("surfaces pending changes from sources, including the enjoined D/S rule", () => {
+  it("merges a change reported by several sources into one item with all its sources", () => {
     const watch = watchItems(sources);
-    expect(watch.length).toBeGreaterThanOrEqual(3);
-    expect(watch.some((w) => w.status === "enjoined")).toBe(true);
-    expect(watch.some((w) => /H-1B/.test(w.summary))).toBe(true);
+    const ds = watch.filter((w) => w.id === "ds-final-rule");
+    expect(ds).toHaveLength(1);
+    expect(ds[0]).toMatchObject({ status: "enjoined" });
+    expect(ds[0].sources.map((s) => s.source_id)).toEqual(["uscis-i765", "ecfr-8cfr-214-2-pre-ds-rule", "cmu-news"]);
+  });
+
+  it("gives every watch item a student-facing headline", () => {
+    for (const w of watchItems(sources)) expect(w.headline, w.id).not.toBe("");
+    expect(watchItems(sources).map((w) => w.id)).toContain("h1b-petition-fee");
   });
 });

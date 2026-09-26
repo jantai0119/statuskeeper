@@ -45,8 +45,8 @@ It never computes a date.
 | Sources (19 pages, federal + Carnegie Mellon) | done, pending human review |
 | Rules | 15 drafts: OPT, STEM OPT, CPT, SSN, travel signature, guidance flags |
 | Timeline engine | done: pure, tested against the real rules |
-| UI | next |
-| Source watcher | later |
+| UI | done: profile form, timeline, heads-up; static page |
+| Source watcher | next |
 
 v1 targets one segment: F-1 master's students already enrolled at Carnegie Mellon.
 

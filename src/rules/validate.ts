@@ -34,6 +34,11 @@ export function validateRuleBase(sourcesData: unknown, docs: RuleDocument[]): Va
     if (sourcesById.has(s.id)) errors.push(`rules/sources.yaml: duplicate source id "${s.id}"`);
     sourcesById.set(s.id, s);
   }
+  const changeIds = new Set(sources.flatMap((s) => (s.pending_changes ?? []).map((p) => p.id)));
+  for (const id of changeIds) {
+    const hasHeadline = sources.some((s) => s.pending_changes?.some((p) => p.id === id && p.headline));
+    if (!hasHeadline) errors.push(`rules/sources.yaml: pending change "${id}" needs a headline on at least one entry`);
+  }
   for (const s of sources) {
     for (const target of s.refines ?? []) {
       const t = sourcesById.get(target);

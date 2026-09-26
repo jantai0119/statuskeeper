@@ -44,6 +44,11 @@ export function applyOffset(iso: IsoDate, offset: Offset): IsoDate {
   return addBusinessDays(iso, offset.business_days);
 }
 
+/** Whole days from `from` to `to` (negative if `to` is earlier). */
+export function daysBetween(from: IsoDate, to: IsoDate): number {
+  return Math.round((toDate(to).getTime() - toDate(from).getTime()) / 86_400_000);
+}
+
 /** ISO dates compare correctly as strings. */
 export const maxDate = (dates: IsoDate[]) => dates.reduce((a, b) => (b > a ? b : a));
 export const minDate = (dates: IsoDate[]) => dates.reduce((a, b) => (b < a ? b : a));

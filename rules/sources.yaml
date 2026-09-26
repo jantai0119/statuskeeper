@@ -26,7 +26,9 @@
 #   not_stated         things one might expect here that the page does NOT say
 #   pending_changes    announced changes NOT in force. Never applied by the
 #                      engine; display: watch means the UI shows it as a
-#                      "watch" item, not as a rule or task.
+#                      "watch" item, not as a rule or task. Give the same
+#                      change the same id on every source that reports it;
+#                      headline (plain English, for students) on at least one.
 #   status             omitted = usable; needs_verification = rules citing this
 #                      source must stay unfinished until a human confirms it
 #   recheck_next_scan  true = the page is known to be mid-rewrite; the next
@@ -145,6 +147,12 @@ sources:
         status: enjoined
         since: 2026-09-14
         next_event: "Hearing Oct. 2, 2026 (per cmu-news, not stated on this page)"
+        id: ds-final-rule
+        headline: >-
+          A new federal rule would replace "duration of status" with fixed end
+          dates and cut the grace period after graduation from 60 to 30 days. A
+          court has paused it while a lawsuit continues. Your timeline follows
+          the current rules until that changes.
         display: watch
 
   - id: ecfr-8cfr-214-2-pre-ds-rule
@@ -176,6 +184,7 @@ sources:
         status: enjoined
         since: 2026-09-14
         next_event: "Hearing 2026-10-02 (per cmu-news)"
+        id: ds-final-rule
         display: watch
     notes: >-
       Pinned deliberately to 2026-09-01, the last version before the D/S rule's
@@ -523,6 +532,7 @@ sources:
         status: enjoined
         since: 2026-09-14
         next_event: "Hearing 2026-10-02"
+        id: ds-final-rule
         display: watch
       - summary: >-
           Proposed USCIS rule adding a fee for certain H-1B petitions (news
@@ -530,6 +540,10 @@ sources:
           read from a primary source; could land before the March lottery.
         status: proposed
         since: 2026-08-27
+        id: h1b-petition-fee
+        headline: >-
+          USCIS has proposed a new fee on certain H-1B petitions. It is not
+          final, and the amount and who it applies to are not confirmed yet.
         display: watch
     notes: "The highest-signal page for 'what changed'. Watch it daily."
 
