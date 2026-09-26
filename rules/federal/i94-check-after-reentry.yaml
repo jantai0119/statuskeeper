@@ -1,0 +1,36 @@
+id: i94-check-after-reentry
+title: Check your I-94 after every re-entry
+summary: >-
+  Each time you come back into the U.S., look up your I-94 arrival record on
+  the CBP website, check it for mistakes (your status should show F-1 and
+  "D/S"), and save a copy. If anything is wrong, contact OIE right away.
+task: Check your I-94 record online and save a copy
+authority: federal
+school: null
+applies_to: []
+when:
+  phase: [in_program, after_program_end]
+computation:
+  type: window
+  opens_latest_of:
+    - { from: planned_reentry, offset: { days: 0 } }
+sources:
+  - source_id: cmu-documents
+    source_url: https://www.cmu.edu/oie/maintaining-status/students/documents.html
+    supports: View the I-94 online after entry, verify it, and save a copy every time you re-enter; contact OIE if it's wrong.
+  - source_id: cmu-travel-f1
+    source_url: https://www.cmu.edu/oie/travel/documents/f1-and-j1-students/index.html
+    supports: After each entry, check and download the new I-94; notify OIE if it doesn't show D/S and the right status.
+effective_date: null
+verified_on: null
+status: draft
+notes: >-
+  Also emphasised at CMU OIE info session, 2026-08-31.
+
+  The I-94 is a federal (CBP) record, but both monitored sources are CMU
+  pages; no CBP page is in sources.yaml yet. Add the CBP I-94 site before
+  activating.
+
+  "D/S" in the summary is the current rule. If the enjoined D/S final rule
+  takes effect, the I-94 will show a fixed admit-until date instead, and
+  this summary must change.

@@ -1,0 +1,43 @@
+id: passport-six-month-validity
+title: Passport valid six months past your return
+summary: >-
+  To come back into the U.S. after a trip abroad, your passport should be
+  valid for at least six months after the day you return. If it expires
+  sooner, renew it before you travel; you can usually do that through your
+  country's embassy or consulate in the U.S.
+task: Check your passport is valid 6 months past your return
+authority: federal
+school: null
+applies_to: []
+when:
+  phase: [in_program, after_program_end]
+computation:
+  type: validity
+  # "Valid 6 months after re-entry" is the same as "passport expiry minus 6
+  # months is on or after the re-entry date".
+  valid_until: { from: passport_expiry, offset: { months: -6 } }
+  must_be_valid_on: planned_reentry
+sources:
+  - source_id: sits-travel
+    source_url: https://studyinthestates.dhs.gov/students/study/traveling-as-an-f-or-m-student
+    supports: Passport must be valid for at least six months after the date of re-entry.
+  - source_id: cmu-travel-f1
+    source_url: https://www.cmu.edu/oie/travel/documents/f1-and-j1-students/index.html
+    supports: Passport valid at all times and at least six months into the future to enter the U.S.
+  - source_id: cmu-documents
+    source_url: https://www.cmu.edu/oie/maintaining-status/students/documents.html
+    supports: Passport valid at least six months into the future to re-enter the U.S. or apply for a visa.
+effective_date: null
+verified_on: null
+status: draft
+notes: >-
+  Measured from the re-entry date, as sits-travel states it, rather than the
+  departure date: the conservative reading, since re-entry is later.
+
+  Also raised at CMU OIE info session, 2026-08-31, with a practical point:
+  CBP may set the I-94 admit-until date to the passport expiry if it comes
+  first. That only matters once fixed admission periods apply (see the D/S
+  pending change), so it isn't part of this rule.
+
+  passport_expiry is an event anchor, entered with trip dates, not a profile
+  field. Draft until the maintainer checks the sources.

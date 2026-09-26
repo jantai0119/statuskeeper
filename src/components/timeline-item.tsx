@@ -39,7 +39,7 @@ function when(item: TimelineItem, today: string): { main: string; sub?: string }
     case "validity":
       return item.valid_until
         ? {
-            main: `Valid until ${formatDate(item.valid_until)}`,
+            main: `Good for re-entry until ${formatDate(item.valid_until)}`,
             sub: item.needed_on ? `you return ${formatDate(item.needed_on)}` : relative(today, item.valid_until),
           }
         : null;

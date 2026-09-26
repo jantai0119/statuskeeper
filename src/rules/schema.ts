@@ -26,6 +26,7 @@ export const EVENT_ANCHORS = [
   "cpt_start_date",
   "opt_ead_start_date",
   "opt_ead_end_date",
+  "passport_expiry",
 ] as const;
 
 /** Profile fields that hold counts; the only fields a threshold can test. */
@@ -258,6 +259,8 @@ const PendingChange = z.strictObject({
   headline: z.string().optional(),
   /** Maintainer notes: what this particular source says about the change. */
   summary: z.string(),
+  /** Maintainer notes from one-time inputs (sessions, emails). Not shown in the UI. */
+  notes: z.string().optional(),
   status: z.string(),
   since: IsoDate.optional(),
   next_event: z.string().optional(),

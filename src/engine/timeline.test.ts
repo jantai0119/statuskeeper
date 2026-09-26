@@ -135,6 +135,31 @@ describe("computeTimeline", () => {
     expect(find(items, "i20-travel-signature")).toMatchObject({ valid_until: "2027-01-05", state: "lapses_before_needed" });
   });
 
+  describe("passport and I-94 around a planned trip", () => {
+    const trip = { planned_departure: "2026-12-18", planned_reentry: "2027-01-10" };
+
+    it("flags a passport that expires within six months of the return date", () => {
+      const items = computeTimeline(student, rules, TODAY, { ...all, events: { ...trip, passport_expiry: "2027-05-01" } });
+      // 2027-05-01 minus 6 months = 2026-11-01, before the 2027-01-10 return
+      expect(find(items, "passport-six-month-validity")).toMatchObject({ valid_until: "2026-11-01", state: "lapses_before_needed" });
+    });
+
+    it("accepts a passport with more than six months left at return", () => {
+      const items = computeTimeline(student, rules, TODAY, { ...all, events: { ...trip, passport_expiry: "2030-01-01" } });
+      expect(find(items, "passport-six-month-validity")).toMatchObject({ valid_until: "2029-07-01", state: "valid" });
+    });
+
+    it("asks for the passport date instead of calling it missing", () => {
+      const items = computeTimeline(student, rules, TODAY, { ...all, events: trip });
+      expect(find(items, "passport-six-month-validity")).toMatchObject({ state: "unknown", waiting_on: ["passport_expiry"] });
+    });
+
+    it("puts the I-94 check on the return date, open-ended", () => {
+      const items = computeTimeline(student, rules, TODAY, { ...all, events: trip });
+      expect(find(items, "i94-check-after-reentry")).toMatchObject({ opens: "2027-01-10", closes: null, state: "upcoming" });
+    });
+  });
+
   it("reports a missing signature rather than inventing a date", () => {
     const items = computeTimeline({ ...student, last_travel_signature_date: null }, rules, TODAY, all);
     expect(find(items, "i20-travel-signature")).toMatchObject({ valid_until: null, state: "missing" });

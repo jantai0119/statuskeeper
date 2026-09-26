@@ -14,6 +14,7 @@ export const ANCHOR_LABELS: Record<Anchor, string> = {
   cpt_start_date: "CPT start date (on your CPT I-20)",
   opt_ead_start_date: "OPT start date (on your EAD card)",
   opt_ead_end_date: "OPT end date (on your EAD card)",
+  passport_expiry: "Passport expiry date",
 };
 
 const fmt = new Intl.DateTimeFormat("en-US", { month: "short", day: "numeric", year: "numeric", timeZone: "UTC" });
@@ -39,9 +40,10 @@ export function stateLabel(item: TimelineItem): { text: string; tone: "ok" | "wa
     case "validity":
       return {
         valid: { text: "Valid", tone: "ok" as const },
-        expired: { text: "Expired", tone: "danger" as const },
+        expired: { text: "Lapsed", tone: "danger" as const },
         lapses_before_needed: { text: "Lapses before you return", tone: "danger" as const },
         missing: { text: "None on file", tone: "warn" as const },
+        unknown: { text: "Needs a date", tone: "warn" as const },
       }[item.state];
     case "threshold":
       return item.triggered ? { text: "Limit reached", tone: "danger" } : null;

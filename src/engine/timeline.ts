@@ -40,7 +40,8 @@ export type TimelineItem = ItemBase &
         kind: "validity";
         valid_until: IsoDate | null;
         needed_on: IsoDate | null;
-        state: "valid" | "expired" | "lapses_before_needed" | "missing";
+        /** missing: a profile date is empty (e.g. never had a signature). unknown: an event date not entered yet. */
+        state: "valid" | "expired" | "lapses_before_needed" | "missing" | "unknown";
       }
     | { kind: "threshold"; value: number; limit: number; triggered: boolean }
     | { kind: "guidance" }
@@ -140,7 +141,7 @@ export function computeTimeline(
         const waiting = needed_on === null ? [...missing, c.must_be_valid_on] : missing;
         const state =
           valid_until === null
-            ? "missing"
+            ? (c.valid_until.from in profile ? "missing" : "unknown")
             : valid_until < today
               ? "expired"
               : needed_on !== null && valid_until < needed_on
