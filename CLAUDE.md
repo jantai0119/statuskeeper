@@ -98,6 +98,9 @@ src/profile/schema.ts       the profile (zod)
 src/rules/schema.ts         rule + sources schema (zod)
 src/rules/validate.ts       pure cross-file validation
 src/rules/load.ts           reads rules/ from disk (the only fs code)
+src/engine/dates.ts         UTC date math: days, calendar months (clamped), business days
+src/engine/timeline.ts      computeTimeline(profile, rules, today, { events, includeUnverified })
+src/engine/watch.ts         pending_changes from sources, as heads-up items
 src/app/                    Next.js App Router UI (placeholder so far)
 ```
 
@@ -114,8 +117,20 @@ npm run typecheck       # next typegen && tsc (typegen provides LayoutProps etc.
 Node 24 (`.nvmrc`). npm, not pnpm/yarn. CI: `.github/workflows/ci.yml` runs
 lint, typecheck and tests on every push and PR. Deploy target: Vercel.
 
+## Engine behaviour
+
+- Only `active` rules by default. `includeUnverified: true` includes drafts;
+  the UI must label those items as unverified.
+- Event anchors (trip dates, DSO recommendation, EAD dates) come in as
+  `events`. Anything unknown is listed in `waiting_on`; the engine never
+  guesses a date.
+- Windows with some anchors unknown use the known points and list the rest
+  in `waiting_on`, so the real window may be narrower than shown.
+- `lead_time` rules produce one deadline per target they precede.
+- Tests in `src/engine/timeline.test.ts` run the real rules with a fixed
+  `today`; every expected date is worked out by hand from the rule files.
+
 ## Not built yet
 
-The engine (`computeTimeline`), the UI, and the source watcher. Build them in
-that order; the engine gets its own tests with fixed `today` values before
-any UI uses it.
+The UI (profile form in localStorage, timeline view, watch items), then the
+source watcher.

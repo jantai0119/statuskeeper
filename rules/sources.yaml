@@ -524,6 +524,13 @@ sources:
         since: 2026-09-14
         next_event: "Hearing 2026-10-02"
         display: watch
+      - summary: >-
+          Proposed USCIS rule adding a fee for certain H-1B petitions (news
+          item dated 2026-08-27). Amount, scope and effective date not yet
+          read from a primary source; could land before the March lottery.
+        status: proposed
+        since: 2026-08-27
+        display: watch
     notes: "The highest-signal page for 'what changed'. Watch it daily."
 
   - id: cmu-academic-calendar
