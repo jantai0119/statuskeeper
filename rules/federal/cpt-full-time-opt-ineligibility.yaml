@@ -1,0 +1,38 @@
+id: cpt-full-time-opt-ineligibility
+title: 365+ days of full-time CPT ends OPT eligibility
+summary: >-
+  If you have used 365 days or more of full-time CPT (more than 20 hours a
+  week) at your current degree level, you are no longer eligible for OPT at
+  that level. Part-time CPT does not count toward this limit.
+task: "Warning: you have no OPT eligibility left at this degree level"
+authority: federal
+school: null
+applies_to: [cpt_full_time_days]
+computation:
+  type: threshold
+  field: cpt_full_time_days
+  at_least: 365
+sources:
+  - source_id: ecfr-8cfr-214-2-pre-ds-rule
+    source_url: https://www.ecfr.gov/on/2026-09-01/title-8/chapter-I/subchapter-B/part-214/subpart-A/section-214.2#p-214.2(f)(10)(i)
+    supports: One year or more of full-time CPT makes a student ineligible for post-completion practical training.
+  - source_id: sevp-cpt
+    source_url: https://studyinthestates.dhs.gov/sevis-help-hub/student-records/fm-student-employment/f-1-curricular-practical-training-cpt
+    supports: One year of full-time CPT eliminates OPT eligibility; full-time means more than 20 hours per week.
+  - source_id: sevp-opt
+    source_url: https://studyinthestates.dhs.gov/sevis-help-hub/student-records/fm-student-employment/f-1-optional-practical-training-opt
+    supports: >-
+      "12 months or more" of full-time CPT; full-time CPT at a previous school
+      at the same program level counts, CPT at another level does not.
+effective_date: null
+verified_on: null
+status: draft
+notes: >-
+  The threshold is 365 days per CMU OIE webinar, 2026-09-25, which stated it
+  as a day count. The monitored federal sources say "one year" and "12
+  months". Because the profile stores CPT in days, the rule needs a day
+  number; 365 is also the conservative choice, since 12 calendar months can
+  be 366 days across a leap year.
+
+  cpt_full_time_days must count only CPT at the current degree level
+  (including at a previous school at the same level).

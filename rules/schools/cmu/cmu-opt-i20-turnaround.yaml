@@ -1,0 +1,36 @@
+id: cmu-opt-i20-turnaround
+title: Allow 10 business days for CMU to issue your OPT I-20
+summary: >-
+  Before you can file with USCIS, CMU's international office (OIE) has to
+  issue a new I-20 recommending OPT or STEM OPT, which takes up to 10 business
+  days. Request it at least 10 business days before the last day you could
+  file, or you may run out of time.
+task: Request your OPT / STEM OPT I-20 from OIE in MyOIE
+authority: school
+school: cmu
+refines: [opt-post-completion-filing-window, stem-opt-filing-window]
+applies_to: []
+when:
+  phase: [in_program, after_program_end]
+computation:
+  type: lead_time
+  precedes: [opt-post-completion-filing-window, stem-opt-filing-window]
+  lead: { business_days: -10 }
+sources: []
+effective_date: null
+verified_on: null
+status: draft
+notes: >-
+  Source: CMU OIE webinar, 2026-09-25 ("up to 10 business days ... before the
+  student can even file with USCIS"). No monitored CMU page states the OPT or
+  STEM I-20 turnaround: cmu-post-completion-opt and cmu-stem-opt give no
+  processing time. OIE's pages give 10 business days for the CPT I-20 and the
+  cap-gap I-20, which is consistent but not the same document.
+
+  The webinar stated this for the OPT recommendation I-20. Applying it to STEM
+  OPT follows the maintainer's instruction; no source states the STEM I-20
+  turnaround directly.
+
+  Engine behaviour: for each target rule, subtract 10 business days from its
+  closing date(s) to get the last day to request the I-20. Holidays and
+  closures are not modelled, so "up to 10" is treated as exactly 10.

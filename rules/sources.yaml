@@ -1,0 +1,584 @@
+# Monitored sources for the rule base.
+#
+# Every rule in rules/ must cite one of these sources. The (future) source
+# watcher re-fetches each URL, diffs it against the last reviewed version, and
+# opens a PR proposing rule edits. Nothing here is computed from; it is the
+# evidence trail.
+#
+# Field reference
+#   id                 stable slug; rule files reference sources by this id
+#   url                the exact page monitored
+#   title              page title as the page shows it
+#   publisher          who issues the page
+#   layer              federal | school
+#   school             null for federal; school slug (e.g. cmu) for school layer
+#   refines            school layer only: ids of federal sources this page narrows.
+#                      Where a school rule is stricter, it wins for that school.
+#   governs            topic tags (vocabulary below)
+#   page_last_updated  the "last updated" date printed ON the page, if any.
+#                      Blank = the page states none (all CMU pages), so the
+#                      watcher must diff content, not trust a date.
+#   last_checked       set only when a human has reviewed the page against the
+#                      rules that cite it. Deliberately blank in this commit.
+#   fetch              how the initial snapshot was obtained, and whether it worked
+#   observed           what the page actually stated when fetched on observed_on,
+#                      paraphrased. A snapshot for diffing, not a verified rule.
+#   not_stated         things one might expect here that the page does NOT say
+#   pending_changes    announced changes NOT in force. Never applied by the
+#                      engine; display: watch means the UI shows it as a
+#                      "watch" item, not as a rule or task.
+#   status             omitted = usable; needs_verification = rules citing this
+#                      source must stay unfinished until a human confirms it
+#   recheck_next_scan  true = the page is known to be mid-rewrite; the next
+#                      source scan must re-read it even if the diff looks small
+#   notes              modelling guidance for rule authors
+#
+# Topic vocabulary (governs)
+#   enrollment          full-time course load, reduced course load, online limits
+#   i20_validity        I-20 end date, extensions
+#   travel_signature    I-20 travel endorsement validity and how to obtain it
+#   re_entry            documents needed to re-enter the U.S.
+#   visa_stamp          visa sticker validity and renewal
+#   passport            passport validity requirements
+#   grace_period        time allowed after program/OPT end
+#   on_campus_work      on-campus employment limits
+#   cpt                 curricular practical training
+#   opt                 post-completion OPT eligibility, filing, unemployment, reporting
+#   stem_opt            24-month STEM OPT extension
+#   h1b_cap_gap         H-1B cap calendar and cap-gap extension (employer-driven)
+#   ssn                 Social Security Number eligibility
+#   academic_calendar   term dates
+#   rule_changes        announcements of changes to any of the above
+
+schema_version: 1
+observed_on: 2026-09-25
+
+sources:
+
+  # ───────────────────────────── FEDERAL LAYER ─────────────────────────────
+
+  - id: sevp-opt
+    url: https://studyinthestates.dhs.gov/sevis-help-hub/student-records/fm-student-employment/f-1-optional-practical-training-opt
+    title: F-1 Optional Practical Training (OPT)
+    publisher: SEVP (DHS) — Study in the States, SEVIS Help Hub
+    layer: federal
+    school: null
+    governs: [opt, cpt, h1b_cap_gap]
+    page_last_updated: 2025-05-19
+    last_checked:
+    fetch: { status: ok, method: browser }
+    observed:
+      - "Audience is DSOs (school officials), not students."
+      - "OPT eligibility: full-time student for one academic year; not in ESL; employment related to major; OPT at this level not exhausted; not authorized for 12+ months of full-time CPT."
+      - "Full-time CPT at a previous school at the same program level counts toward the 12-month CPT total; CPT at another level does not."
+      - "Twelve months of OPT per higher level of study."
+      - "Post-completion OPT must be at least 20 hours per week or full-time."
+      - "Form I-765 must be received by USCIS within 30 days of the DSO recommendation in SEVIS; after day 30 it is denied. Filing before the recommendation is also denied."
+      - "An OPT request left in Requested status longer than 180 days is auto-cancelled by SEVIS."
+      - "Post-completion OPT start date: on or after the program end date, and no more than 60 days after it."
+      - "Post-completion OPT end date: no more than 12 months after the start date."
+      - "Post-completion OPT unemployment: up to 90 days total; SEVP may terminate at 90."
+      - "Student reports name/address/employer changes to the DSO within 10 days; DSO updates SEVIS within 21 days."
+      - "Cap-gap: SEVIS auto-extends OPT if, on or after April 1, an employer files an eligible change-of-status H-1B petition with an October 1 start and the student's OPT ends on or after April 1."
+    not_stated:
+      - "The 90-days-before-program-end filing opening. That is on the USCIS I-765 page (uscis-i765)."
+    notes: >-
+      The cap-gap section still says "17-month OPT extension", a pre-2016
+      term, so parts of this page are stale despite the 2025 update date.
+      Prefer uscis-i765 for filing windows.
+
+  - id: sevp-cpt
+    url: https://studyinthestates.dhs.gov/sevis-help-hub/student-records/fm-student-employment/f-1-curricular-practical-training-cpt
+    title: F-1 Curricular Practical Training (CPT)
+    publisher: SEVP (DHS) — Study in the States, SEVIS Help Hub
+    layer: federal
+    school: null
+    governs: [cpt]
+    page_last_updated: 2026-08-24
+    last_checked:
+    fetch: { status: ok, method: browser }
+    observed:
+      - "Eligibility: lawfully enrolled full-time for at least a full academic year (exception for graduate programs that require earlier training); not in English language training; has secured a training position; practical training is integral to an established curriculum and directly related to the major."
+      - "CPT occurs before the program end date on the I-20."
+      - "CPT must be authorized in SEVIS before work begins; start date on or after the authorization date."
+      - "Authorization is per employer and per period; concurrent authorizations are allowed with a separate authorization each."
+      - "Full-time = more than 20 hours/week; part-time = 20 hours or less."
+      - "Student must keep a full course of study while school is in session, even with CPT."
+      - "One year of full-time CPT eliminates OPT eligibility."
+      - "CPT authorization is only required for training inside the United States."
+      - "DSOs can cancel CPT before its start date; after it, they can only shorten the end date."
+      - "Refers DSOs to an August 2026 broadcast message on CPT guidance and a liability reminder."
+    not_stated:
+      - "The text of the August 2026 broadcast message. It is linked from this page but is not itself a monitored source (see candidates at the bottom)."
+    notes: >-
+      This is the federal floor for CPT. Keep it a separate rule from cmu-cpt.
+      Schools decide what counts as curricular, the course requirement and
+      their own deadlines, and those are stricter. DECISION (2026-09-25): the
+      CPT rule uses the August 2026 SEVP standard. The internship must be a
+      graduation requirement for every student in the program; elective
+      internships do not qualify (they go through pre-completion OPT). That
+      standard is currently evidenced via cmu-news, not by this page's own
+      text. Promote the broadcast message (see candidates) to a monitored
+      source.
+
+  - id: uscis-i765
+    url: https://www.uscis.gov/i-765
+    title: I-765, Application for Employment Authorization
+    publisher: USCIS
+    layer: federal
+    school: null
+    governs: [opt, stem_opt, rule_changes]
+    page_last_updated: 2026-09-15
+    last_checked:
+    fetch: { status: ok, method: browser }
+    observed:
+      - "Accepted form edition: 08/21/25."
+      - "(c)(3)(B) post-completion OPT: file up to 90 days before, and no later than 60 days after, the program end date; must file within 30 days of the DSO's SEVIS recommendation."
+      - "(c)(3)(C) STEM OPT: file up to 90 days before the current OPT expires."
+      - "(c)(3)(A) pre-completion OPT: file up to 90 days before completing one full academic year; employment cannot start before that year is complete."
+      - "Alert: a Sept. 14, 2026 order of the U.S. District Court for the District of Massachusetts postponed the D/S final rule (91 Fed. Reg. 44976, July 17, 2026). USCIS proceeds under the previous regulations and is not accepting the 09/15/26 edition of I-765."
+    not_stated:
+      - "Fee amounts. The page defers to the USCIS fee schedule."
+      - "Processing times."
+    pending_changes:
+      - summary: "D/S final rule: fixed admission periods, and the F-1 grace period cut from 60 to 30 days (the grace-period detail is per cmu-news)."
+        status: enjoined
+        since: 2026-09-14
+        next_event: "Hearing Oct. 2, 2026 (per cmu-news, not stated on this page)"
+        display: watch
+
+  - id: ecfr-8cfr-214-2-pre-ds-rule
+    url: https://www.ecfr.gov/on/2026-09-01/title-8/chapter-I/subchapter-B/part-214/subpart-A/section-214.2
+    title: 8 CFR 214.2 (Sept. 1, 2026)
+    publisher: eCFR (Office of the Federal Register)
+    layer: federal
+    school: null
+    governs: [opt, travel_signature, re_entry]
+    page_last_updated:
+    last_checked:
+    fetch:
+      status: ok
+      method: curl (eCFR versioner API)
+      endpoint: https://www.ecfr.gov/api/versioner/v1/full/2026-09-01/title-8.xml?part=214&section=214.2
+      detail: >-
+        The human URL redirects scripted clients to a bot-check page; the API
+        endpoint above returns the same text and needs Accept-Encoding: gzip.
+    observed:
+      - "(f)(4): an F-1 student returning from a temporary absence of five months or less may be readmitted with a current I-20 properly endorsed by the DSO for reentry. The paragraph states no validity period for the endorsement."
+      - "(f)(11)(i)(B)(2): post-completion OPT I-765 may be filed up to 90 days before the program end date and no later than 60 days after it, and within 30 days of the DSO's SEVIS recommendation."
+      - "(f)(13)(ii): a student with an unexpired post-completion OPT EAD may return to resume employment with an I-20 endorsed for reentry within the last six months."
+    pending_changes:
+      - summary: >-
+          eCFR's "current" text (from 2026-09-15) already incorporates the
+          enjoined D/S final rule. Among other changes, (f)(11)(i)(B)(2) reads
+          "no later than 30 days after" program end instead of 60. USCIS
+          states it is proceeding under the previous provisions.
+        status: enjoined
+        since: 2026-09-14
+        next_event: "Hearing 2026-10-02 (per cmu-news)"
+        display: watch
+    notes: >-
+      Pinned deliberately to 2026-09-01, the last version before the D/S rule's
+      effective date. Do NOT re-point this at "current" while the injunction
+      stands: current eCFR shows enjoined text as if it were law. When the case
+      resolves, re-pin to the date that reflects the law actually in force.
+
+  - id: sits-travel
+    url: https://studyinthestates.dhs.gov/students/study/traveling-as-an-f-or-m-student
+    title: Traveling as an F or M Student
+    publisher: SEVP (DHS) — Study in the States
+    layer: federal
+    school: null
+    governs: [travel_signature, re_entry, passport]
+    page_last_updated: 2026-08-17
+    last_checked:
+    fetch: { status: ok, method: browser }
+    observed:
+      - "Audience is students."
+      - "Before travelling abroad: make sure the DSO has signed your I-20 within the last year, and that you are not leaving the country for more than 5 months."
+      - "Leaving with a pending practical training application is not recommended; the EAD is only mailed to a U.S. address and you are expected to have it in hand to re-enter."
+      - "Passport must be valid for at least six months after the date of re-entry."
+      - "Without proper documents, CBP may issue a Form I-515A, which admits you for 30 days to fix them."
+    not_stated:
+      - "What 'within the last year' is measured from (departure, re-entry, or today)."
+    notes: >-
+      The only federal source found for the one-year travel-signature validity;
+      the regulation ((f)(4) in ecfr-8cfr-214-2-pre-ds-rule) says only
+      "properly endorsed".
+
+  # ───────────────────────── SCHOOL LAYER — CARNEGIE MELLON ─────────────────────────
+  # No CMU page prints a "last updated" date, so page_last_updated is blank throughout.
+
+  - id: cmu-maintaining-status
+    url: https://www.cmu.edu/oie/maintaining-status/students/index.html
+    title: Maintaining Legal Status for Students
+    publisher: CMU Office of International Education
+    layer: school
+    school: cmu
+    refines: []
+    governs: [enrollment, i20_validity]
+    page_last_updated:
+    last_checked:
+    fetch: { status: ok, method: curl }
+    observed:
+      - "Navigation hub linking to documents, course load, program change and leaving-CMU pages. States no rules itself."
+    notes: "Thin. Monitor only for added or removed links to child pages."
+
+  - id: cmu-course-load
+    url: https://www.cmu.edu/oie/maintaining-status/students/course-load-modality.html
+    title: Courseload & Course Delivery Mode
+    publisher: CMU Office of International Education
+    layer: school
+    school: cmu
+    refines: []
+    governs: [enrollment]
+    page_last_updated:
+    last_checked:
+    fetch: { status: ok, method: curl }
+    observed:
+      - "Full course of study required every fall and spring semester; summer depends on the program (may be a vacation term)."
+      - "Full course of study at CMU is at least 36 units per semester; some graduate programs require more."
+      - "Must be full-time in the final semester unless OIE authorizes a reduced course load (RCL)."
+      - "RCL needs academic advisor and OIE approval BEFORE dropping below full-time, via a form submitted in MyOIE."
+      - "Allowed RCL reasons: first-semester adjustment, improper course placement, final semester needing under 36 units (if the program allows), documented medical condition."
+      - "Only one remote-only course per semester counts toward full-time enrollment."
+    not_stated:
+      - "Any deadline (days before add/drop) for submitting an RCL request."
+
+  - id: cmu-documents
+    url: https://www.cmu.edu/oie/maintaining-status/students/documents.html
+    title: Documents & Legal Rules
+    publisher: CMU Office of International Education
+    layer: school
+    school: cmu
+    refines: [sevp-opt]
+    governs: [passport, i20_validity, travel_signature, visa_stamp, enrollment, opt, grace_period, on_campus_work]
+    page_last_updated:
+    last_checked:
+    fetch: { status: ok, method: curl }
+    observed:
+      - "Passport must stay valid, and be valid at least 6 months into the future to re-enter or apply for a visa."
+      - "After initial entry, re-entry requires a travel signature less than 12 months old."
+      - "An expired visa does not affect status inside the U.S.; renewal only happens abroad."
+      - "Graduate full-time minimum is set by the department, between 36 and 72 units per semester. At most one online course counts."
+      - "Request an I-20 extension at least one month before it expires."
+      - "OPT: apply from 90 days before program completion until the end of the 60-day grace period; OIE strongly recommends applying before completion."
+      - "F-1 grace period: 60 days (depart, change status, or get a new I-20 for a new program)."
+      - "On-campus work permission ends at program completion or I-20 end, whichever comes first."
+    notes: >-
+      The 60-day grace period here is the pre-D/S-rule value. See pending
+      change on uscis-i765 and cmu-news.
+
+  - id: cmu-cpt
+    url: https://www.cmu.edu/oie/employment/f1-students/curricular-practical-training.html
+    title: Curricular Practical Training (CPT)
+    publisher: CMU Office of International Education
+    layer: school
+    school: cmu
+    refines: [sevp-cpt]
+    governs: [cpt]
+    page_last_updated:
+    last_checked:
+    recheck_next_scan: true
+    fetch: { status: ok, method: curl }
+    observed:
+      - "Page carries an 'under construction' banner."
+      - "CPT = off-campus work that is an integral part of the curriculum; the associated course is a degree requirement."
+      - "Eligibility: full-time enrollment (36+ units) in the U.S. for at least one full academic year (fall and spring) immediately preceding CPT; graduate programs requiring immediate internship may be exempt."
+      - "Must be enrolled in an internship or practicum course during the CPT term; independent study does not qualify."
+      - "Internship must be necessary for all students in the program; departments vet employers."
+      - "CPT dates must fall within a single academic term per the CMU Academic Calendar; the end date may extend to the term end with department approval."
+      - "Start and end dates on the offer letter must be in the future and inside one term."
+      - "No work until OIE approves and the CPT I-20 is issued; no retroactive authorization."
+      - "Steps include an academic advisor recommendation form and passing a CPT Canvas course."
+      - "New CPT I-20 (includes a travel signature) issued within ten business days of the request."
+      - "Summer CPT applications may start when summer course registration opens."
+    not_stated:
+      - "A part-time hour limit during the academic year (the federal definition is on sevp-cpt)."
+      - "How far in advance to apply, beyond the 10-business-day processing time."
+      - "The 12-month full-time CPT / OPT interaction (stated on cmu-opt-overview and the federal pages)."
+    notes: >-
+      Stricter than sevp-cpt in several ways: course enrollment is required,
+      independent study is excluded, dates must sit inside a single term, and
+      there is a 10-business-day lead time. Keep this a separate rule that
+      refines the federal one. The rule file must say that this page was
+      still being rewritten for the August 2026 SEVP guidance when the rule
+      was written (see cmu-news and the "under construction" banner).
+      Re-check it in the next source scan and reconcile any new CMU wording
+      with the federal standard in sevp-cpt.
+
+  - id: cmu-on-campus-employment
+    url: https://www.cmu.edu/oie/employment/f1-students/on-campus-employment.html
+    title: On-Campus Employment
+    publisher: CMU Office of International Education
+    layer: school
+    school: cmu
+    refines: []
+    governs: [on_campus_work]
+    page_last_updated:
+    last_checked:
+    fetch: { status: ok, method: curl }
+    observed:
+      - "No employment authorization required for on-campus work."
+      - "Excludes Federal Work Study, work for another employer at CMU (e.g., a professor's company), and work at another school."
+      - "Up to 20 hours/week during the semester; full-time during summer vacation and official breaks."
+      - "Students enrolled full-time in summer are not on vacation and remain limited to 20 hours/week."
+    not_stated:
+      - "When on-campus work must end (it is on cmu-documents: at program completion)."
+
+  - id: cmu-opt-overview
+    url: https://www.cmu.edu/oie/employment/f1-students/opt-stem-opt-extension/index.html
+    title: Optional Practical Training (OPT) & STEM OPT Extension
+    publisher: CMU Office of International Education
+    layer: school
+    school: cmu
+    refines: [sevp-opt]
+    governs: [opt, stem_opt, h1b_cap_gap]
+    page_last_updated:
+    last_checked:
+    fetch: { status: ok, method: curl }
+    observed:
+      - "USCIS authorization can take one to two months."
+      - "Eligibility: full-time for one academic year (two full consecutive terms); used less than 12 months of full-time CPT; not already approved for 12 months OPT at the same degree level."
+      - "12 months OPT per degree level; post-completion is reduced by any pre-completion OPT used."
+      - "STEM OPT extension is 24 months."
+      - "Employers can file an H-1B petition up to six months before the fiscal year (April 1) for an October 1 start."
+    notes: "Mostly a hub page. The processing-time estimate is the only unique fact."
+
+  - id: cmu-post-completion-opt
+    url: https://www.cmu.edu/oie/employment/f1-students/opt-stem-opt-extension/post-completion-opt.html
+    title: Post-Completion OPT
+    publisher: CMU Office of International Education
+    layer: school
+    school: cmu
+    refines: [sevp-opt, uscis-i765]
+    governs: [opt]
+    page_last_updated:
+    last_checked:
+    fetch: { status: ok, method: curl }
+    observed:
+      - "Process: pass the OPT Canvas course quiz, then submit the Post-Completion OPT e-Form in MyOIE with an Academic Advisor form, then file I-765 with USCIS (online recommended)."
+      - "Canvas access is lost when the Andrew account moves to alumni status, approximately three months after graduation."
+    not_stated:
+      - "The filing window (it is on cmu-documents and uscis-i765)."
+      - "OIE processing time for the OPT I-20."
+      - "The unemployment limit or start-date rules."
+    notes: "Thin on dates. The ~3-month Canvas cutoff is a real, CMU-only deadline."
+
+  - id: cmu-stem-opt
+    url: https://www.cmu.edu/oie/employment/f1-students/opt-stem-opt-extension/opt-stem-extension.html
+    title: OPT STEM Extension
+    publisher: CMU Office of International Education
+    layer: school
+    school: cmu
+    refines: [uscis-i765]
+    governs: [stem_opt]
+    page_last_updated:
+    last_checked:
+    fetch: { status: ok, method: curl }
+    observed:
+      - "24-month extension for degrees in a designated STEM field completed within the last 10 years; the same degree cannot be reused for a second STEM extension."
+      - "Must currently be on post-completion OPT with an E-Verify employer, paid, at least 20 hours/week, in a job directly related to the STEM degree. Self-employment is not eligible."
+      - "CMU is not an eligible E-Verify employer for STEM OPT."
+      - "Requires a completed Form I-983 training plan submitted to OIE for the STEM I-20."
+      - "File I-765 within 90 days before the OPT EAD end date."
+      - "USCIS must receive the application within 60 days of the STEM recommendation in SEVIS, or it is denied."
+      - "STEM OPT starts the day after initial OPT ends; the student does not choose the dates."
+      - "Two STEM OPT extensions per lifetime."
+      - "May keep working for 180 days while a timely application is pending."
+      - "Aggregate unemployment cap of 150 days (90 on OPT plus 60 on STEM)."
+    not_stated:
+      - "I-983 self-evaluation and validation reporting deadlines."
+      - "OIE processing time for the STEM I-20."
+
+  - id: cmu-h1b-cap-gap
+    url: https://www.cmu.edu/oie/employment/f1-students/opt-stem-opt-extension/h1b-cap-gap-extension.html
+    title: H-1B Cap Gap Extension
+    publisher: CMU Office of International Education
+    layer: school
+    school: cmu
+    refines: [sevp-opt]
+    governs: [h1b_cap_gap, grace_period]
+    page_last_updated:
+    last_checked:
+    status: needs_verification
+    fetch: { status: ok, method: curl }
+    observed:
+      - "The fiscal year starts October 1; employers can file up to six months earlier (April 1)."
+      - "CMU H-1B petitions are cap-exempt; cap-exempt petitions do not transfer to the private sector."
+      - "Cap-gap precondition: as of April 1, on approved OPT or in the 60-day grace period, with a pending or approved change-of-status petition for an October 1 start, filed before OPT or grace ended."
+      - "Consular-processing petitions do not qualify for cap-gap."
+      - "Petition received before OPT expires: work authorization is extended. Received during the grace period: status is extended but no work is allowed."
+      - "States an end date for the cap-gap I-20 extension. Deliberately NOT recorded here until verified against the current USCIS cap-gap guidance."
+      - "Cap-gap I-20 is requested via MyOIE with the EAD and the I-797; OIE issues it within ten business days."
+      - "90-day unemployment rule continues during automatic extension."
+      - "Travel during cap-gap is possible only if the petition and change of status are approved, re-entry is before the H-1B start, and the student is otherwise admissible. H-1B entry is allowed at most ten days before October 1."
+      - "Only the employer can give official updates on the petition."
+    not_stated:
+      - "The employer registration / lottery window or selection dates. No source in this file states the registration calendar."
+    notes: >-
+      Model H-1B as a calendar with preconditions, never as "apply by X".
+      The student does not file. The employer registers and files, and the
+      student's status on the filing date decides cap-gap eligibility.
+      DECISION (2026-09-25): the cap-gap rule stays unfinished, with no end
+      date, until the maintainer has checked the current USCIS cap-gap page.
+      Do not fill it in from this page or from model knowledge.
+
+  - id: cmu-ssn
+    url: https://www.cmu.edu/oie/employment/resources/apply-for-ssn.html
+    title: Applying for a Social Security Number
+    publisher: CMU Office of International Education
+    layer: school
+    school: cmu
+    refines: []
+    governs: [ssn]
+    page_last_updated:
+    last_checked:
+    fetch: { status: ok, method: curl }
+    observed:
+      - "SSN is only required for employment; eligibility requires an on-campus job or CPT/OPT/AT authorization."
+      - "CPT: may apply up to 30 days before the CPT I-20 start date."
+      - "OPT: only from the start date on the approved EAD, though the same line adds that you can apply when submitting the OPT application. Ambiguous."
+      - "On-campus: employer-signed form dropped at OIE; ready after 5 business days."
+      - "New students wait at least 10 days after OIE immigration check-in approval before applying."
+      - "Card typically arrives within 14 business days; contact SSA if not received in 30 days."
+    notes: >-
+      Unresolved: the OPT line contradicts itself. Exact text, under
+      "F-1 and J-1 students are eligible to apply for an SSN if they":
+      "OPT – only from the start date on approved OPT EAD (you can apply
+      when you submit your OPT application to USCIS)." The first clause says
+      to wait for the EAD start date; the parenthetical says apply at I-765
+      filing. Resolve by reading the source (or asking OIE) before any SSN
+      rule covers OPT.
+
+  - id: cmu-travel-f1
+    url: https://www.cmu.edu/oie/travel/documents/f1-and-j1-students/index.html
+    title: Travel Documents for Re-Entry to the U.S. — For F-1 & J-1 Students
+    publisher: CMU Office of International Education
+    layer: school
+    school: cmu
+    refines: [sits-travel]
+    governs: [travel_signature, re_entry, passport, visa_stamp, grace_period]
+    page_last_updated:
+    last_checked:
+    fetch: { status: ok, method: curl }
+    observed:
+      - "Absence over five months may affect status; see an OIE advisor."
+      - "Passport valid at least six months into the future."
+      - "I-20 must have a future end date; enrolled or enrolling for the next CMU semester."
+      - "Current F-1 students: I-20 signed within 12 months of the re-entry date."
+      - "F-1 on OPT: signed within 6 months of the re-entry date (separate e-Form under Limited Services)."
+      - "F-1 travel signature processing: five business days."
+      - "New students need no signature for initial entry; domestic travel needs none."
+      - "Re-entry in F-1 status during the grace period is not allowed."
+      - "After graduation, OIE cannot sign unless the student has applied for post-completion OPT."
+      - "Visa sticker must be unexpired, except automatic revalidation for trips under 30 days to contiguous territory (with listed nationality exclusions)."
+    notes: >-
+      Validity is measured against the RE-ENTRY date, not today, so the
+      engine needs the planned return date or must present it as "valid for
+      re-entry until X".
+
+  - id: cmu-visa-renewal
+    url: https://www.cmu.edu/oie/travel/visa/renew.html
+    title: Visa Renewal & Entry/Transit Visa
+    publisher: CMU Office of International Education
+    layer: school
+    school: cmu
+    refines: []
+    governs: [visa_stamp]
+    page_last_updated:
+    last_checked:
+    fetch: { status: ok, method: curl }
+    observed:
+      - "Renewal is needed only if the visa expires before the planned re-entry date, and must be done outside the U.S."
+      - "Visa expiry does not limit the stay while status is maintained."
+      - "No new I-901 SEVIS fee when renewing on the same active SEVIS ID."
+      - "Check consulate-specific wait times; administrative processing may delay return."
+      - "An unexpired visa in an expired passport remains usable alongside the new passport."
+    not_stated:
+      - "Any lead time or processing-time figure."
+    notes: "Thin on dates. Good for a travel trigger: visa_stamp_expiry < planned re-entry date."
+
+  - id: cmu-news
+    url: https://www.cmu.edu/oie/news-and-events/index.html
+    title: News & Updates
+    publisher: CMU Office of International Education
+    layer: school
+    school: cmu
+    refines: []
+    governs: [rule_changes]
+    page_last_updated:
+    last_checked:
+    fetch: { status: ok, method: curl }
+    observed:
+      - "Listing of dated posts; states no rules itself. Most recent post dated 2026-09-16."
+      - "Post order is not strictly chronological (e.g., an Aug 2026 item sits among 2025 items). The watcher must parse dates, not assume top = newest."
+      - "2026-09-15: preliminary injunction (Sept 14) postpones the D/S final rule; previous F/J rules continue. Next hearing Oct 2."
+      - "2026-07-17 (updated 09-15): D/S final rule. Fixed I-94 end date, 4-year max stay, F-1 grace period cut to 30 days, no program changes for graduate students. Enjoined."
+      - "2026-08-27: SEVP broadcast (Aug 12 and Aug 24): CPT only when the internship is a graduation requirement for all students in the program; elective internships must use pre-completion OPT. OIE is updating its CPT page."
+      - "2026-01-21: final H-1B rule (effective 2026-02-27) replaces the random lottery with a wage-level-weighted lottery; does not affect cap-exempt employers like CMU."
+      - "2025-10-30: interim final rule ends automatic EAD extension for some categories; STEM OPT 180-day continuation is unaffected."
+    pending_changes:
+      - summary: "D/S final rule (see uscis-i765)"
+        status: enjoined
+        since: 2026-09-14
+        next_event: "Hearing 2026-10-02"
+        display: watch
+    notes: "The highest-signal page for 'what changed'. Watch it daily."
+
+  - id: cmu-academic-calendar
+    url: https://events.cmu.edu/live/ical/events/group/Academic%20Calendar/header/Academic%20Calendar%20Events
+    title: Academic Calendar Events (iCal feed)
+    publisher: CMU The HUB (Registrar), served via events.cmu.edu
+    layer: school
+    school: cmu
+    refines: []
+    governs: [academic_calendar]
+    page_last_updated:
+    last_checked:
+    fetch: { status: ok, method: curl, content_type: text/calendar }
+    observed:
+      - "120 VEVENTs spanning 2026-03-08 to 2027-11-07. A rolling window, not whole academic years."
+      - "Includes semester and mini-term milestones: classes begin, last day of classes, add/drop, pass/no-pass and withdrawal deadlines, final exams, grades due."
+    not_stated:
+      - "Doctoral, Heinz, Tepper, Qatar and Africa calendars. Those are separate calendars."
+    notes: >-
+      Replaces the HTML page https://www.cmu.edu/hub/calendar/index.html,
+      which only links to files and states no dates. The webcal:// link on
+      that page is this same URL over https. Because the feed is a rolling
+      window, the watcher should diff by event (UID + date), not by file:
+      events dropping off the past end are expected, not a rule change.
+      Masters students in Heinz or Tepper follow different calendars, so the
+      profile may eventually need a college field.
+
+# ───────────────────────── CANDIDATES (not yet monitored) ─────────────────────────
+# Surfaced while fetching the sources above. Not added: the monitored list is
+# yours to decide.
+#
+# - SEVP August 2026 CPT broadcast messages. Linked from sevp-cpt; the actual
+#   text of the new CPT standard.
+# - CMU news posts on the D/S rule (2025-2026/july/ds-ruling.html,
+#   2026-2027/september/ds-rule-postponed.html). These change as the case moves.
+# - A federal H-1B registration page (USCIS). Needed for the cap calendar;
+#   nothing above states registration dates.
+# - eCFR 8 CFR 214.2(f) for the cap-gap end date (the travel and OPT paragraphs
+#   are now covered by ecfr-8cfr-214-2-pre-ds-rule).
+# - CMU "Travel on OPT or Academic Training" page. Linked in OIE navigation;
+#   likely the OPT counterpart to cmu-travel-f1.
+# - SSA page on SSNs for F-1 students: authoritative for ssn-application-timing-*.
+# - USCIS processing times for I-765 (c)(3)(B)/(C): resolves the 1–2 vs 3–5
+#   month conflict in opt-uscis-processing-time.
+# - eCFR 8 CFR 274a.12(b)(6)(iv): federal basis for the STEM OPT 180-day
+#   continuation (stem-opt-180-day-continuation cites only CMU pages).
+# - SEVP OPT policy guidance: multiple employers on OPT (opt-multiple-employers).
+# - A federal source on F-1 students and entrepreneurship
+#   (f1-startup-work-authorization has no monitored source).
+
+# ───────────────────────── EXCLUDED FROM v1 ─────────────────────────
+# - travel.state.gov (all pages tried, including us-visas.html, global visa
+#   wait times, and the student-visa page): HTTP 403 to scripted fetches; the
+#   browser gets a "Performing security verification" interstitial.
+#   www.state.gov/visas returns 200 but the body is an error page ("forbidden").
+#   Not bypassed. Visa renewal timing in v1 comes from cmu-visa-renewal.
+#   Wait times are per consulate and change weekly, so if the UI shows them,
+#   make it a plain link-out, not a monitored source.

@@ -1,0 +1,37 @@
+id: stem-opt-180-day-continuation
+title: Keep working up to 180 days while STEM OPT is pending
+summary: >-
+  If you filed your STEM OPT extension on time (before your OPT card
+  expired), you may keep working for up to 180 days after your OPT card's
+  end date while USCIS decides, even without the new card. This date is
+  when that automatic extension runs out.
+task: Automatic work extension ends if the STEM OPT card hasn't arrived
+authority: federal
+school: null
+applies_to: [stem_designated]
+when:
+  phase: [after_program_end]
+  stem_designated: true
+computation:
+  type: deadline
+  due: { from: opt_ead_end_date, offset: { days: 180 } }
+sources:
+  - source_id: cmu-stem-opt
+    source_url: https://www.cmu.edu/oie/employment/f1-students/opt-stem-opt-extension/opt-stem-extension.html
+    supports: May continue working for 180 days while a timely application is pending, still subject to STEM reporting.
+  - source_id: cmu-news
+    source_url: https://www.cmu.edu/oie/news-and-events/index.html
+    supports: The Oct 2025 interim final rule on EAD extensions left the STEM OPT 180-day continuation in place.
+effective_date: null
+verified_on: null
+status: draft
+notes: >-
+  Also stated at CMU OIE webinar, 2026-09-25. Applies only if the STEM
+  application was filed within stem-opt-filing-window; the engine should show
+  it only after that filing is recorded.
+
+  No monitored federal source states the 180 days: it is in 8 CFR
+  274a.12(b)(6)(iv), which is not in sources.yaml. Both current citations
+  are CMU pages. Add the federal paragraph before activating.
+
+  Reporting obligations continue during the extension (cmu-stem-opt).

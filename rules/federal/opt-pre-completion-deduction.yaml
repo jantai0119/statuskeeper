@@ -1,0 +1,39 @@
+id: opt-pre-completion-deduction
+title: Approved pre-completion OPT uses up post-completion OPT
+summary: >-
+  You get 12 months of OPT per degree level, shared between OPT during your
+  program (pre-completion) and after it (post-completion). Once pre-completion
+  OPT is approved, that time comes out of your 12 months, even if you never
+  work during it or stop early.
+task: Decide on pre-completion OPT knowing it reduces post-completion OPT
+authority: federal
+school: null
+applies_to: []
+when:
+  phase: [in_program]
+computation:
+  type: guidance
+sources:
+  - source_id: ecfr-8cfr-214-2-pre-ds-rule
+    source_url: https://www.ecfr.gov/on/2026-09-01/title-8/chapter-I/subchapter-B/part-214/subpart-A/section-214.2#p-214.2(f)(10)
+    supports: 12 months of practical training per educational level.
+  - source_id: sevp-opt
+    source_url: https://studyinthestates.dhs.gov/sevis-help-hub/student-records/fm-student-employment/f-1-optional-practical-training-opt
+    supports: 12 months of OPT per higher level of study, split into pre- and post-completion portions.
+  - source_id: cmu-opt-overview
+    source_url: https://www.cmu.edu/oie/employment/f1-students/opt-stem-opt-extension/index.html
+    supports: Post-completion OPT is 12 months or less if pre-completion OPT was used at the same degree level.
+effective_date: null
+verified_on: null
+status: draft
+notes: >-
+  "Deducted once approved, even if unused" is from CMU OIE webinar,
+  2026-09-25. The monitored sources say pre-completion OPT that was "used" or
+  "utilized" reduces the total; none of them says approval alone does. Keep
+  the webinar's stricter reading for planning, and confirm it before
+  activating.
+
+  How part-time pre-completion OPT is counted against the 12 months is not
+  stated in any fetched source; not modelled.
+
+  No profile field records pre-completion OPT yet, so this is guidance only.

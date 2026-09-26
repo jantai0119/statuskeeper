@@ -1,0 +1,34 @@
+id: opt-multiple-employers
+title: Several jobs at once on post-completion OPT
+summary: >-
+  On post-completion OPT you may hold more than one job at the same time, as
+  long as your combined hours are at least 20 a week and every job is
+  related to your degree field. One related job plus one unrelated job does
+  not count.
+task: Check every OPT job is related to your degree and hours total 20+/week
+authority: federal
+school: null
+applies_to: []
+when:
+  phase: [after_program_end]
+computation:
+  type: guidance
+sources:
+  - source_id: sevp-opt
+    source_url: https://studyinthestates.dhs.gov/sevis-help-hub/student-records/fm-student-employment/f-1-optional-practical-training-opt
+    supports: Post-completion OPT must be at least 20 hours per week; employment must relate to the major.
+effective_date: null
+verified_on: null
+status: draft
+notes: >-
+  The combination rule (several jobs may add up to 20 hours; all must be
+  related) is from CMU OIE webinar, 2026-09-25. No monitored source states
+  it; SEVP's page only states the 20-hour minimum and the relatedness
+  requirement. SEVP's OPT policy guidance would be the source to add.
+
+  Scoped to post-completion: the 20-hour minimum is a post-completion rule.
+  Pre-completion OPT while school is in session is capped at 20 hours
+  instead (regulation (f)(10)(ii)(A)(2)).
+
+  Job hours and relatedness are not collected by the app, so this stays
+  guidance.

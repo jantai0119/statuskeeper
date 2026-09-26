@@ -1,0 +1,48 @@
+id: stem-opt-filing-window
+title: STEM OPT extension filing window
+summary: >-
+  You can file Form I-765 for the 24-month STEM OPT extension up to 90 days
+  before your current OPT card (EAD) expires, and you must file before it
+  expires. Your school must recommend the extension in SEVIS first, and USCIS
+  must receive your application within 60 days of that recommendation.
+task: File Form I-765 for the STEM OPT extension
+authority: federal
+school: null
+applies_to: [stem_designated]
+when:
+  phase: [after_program_end]
+  stem_designated: true
+computation:
+  type: window
+  opens_latest_of:
+    - { from: opt_ead_end_date, offset: { days: -90 } }
+    - { from: dso_stem_recommendation, offset: { days: 0 } }
+  closes_earliest_of:
+    # "Must file before" the EAD end date: the last safe day is the day before.
+    - { from: opt_ead_end_date, offset: { days: -1 } }
+    # Counting the recommendation date as day 1, as SEVP does for OPT's 30 days.
+    - { from: dso_stem_recommendation, offset: { days: 59 } }
+sources:
+  - source_id: ecfr-8cfr-214-2-pre-ds-rule
+    source_url: https://www.ecfr.gov/on/2026-09-01/title-8/chapter-I/subchapter-B/part-214/subpart-A/section-214.2#p-214.2(f)(11)(i)(C)
+    supports: Up to 90 days before the current OPT expires; within 60 days of the DSO's SEVIS recommendation.
+  - source_id: uscis-i765
+    source_url: https://www.uscis.gov/i-765
+    supports: (c)(3)(C) up to 90 days before the current OPT expires.
+  - source_id: cmu-stem-opt
+    source_url: https://www.cmu.edu/oie/employment/f1-students/opt-stem-opt-extension/opt-stem-extension.html
+    supports: Within 90 days before the OPT EAD end date; received within 60 days of the STEM recommendation or denied.
+effective_date: null
+verified_on: null
+status: draft
+notes: >-
+  Also stated at CMU OIE webinar, 2026-09-25 (90 days before; must file
+  before the EAD end date). The webinar did not mention the 60-day
+  recommendation limit; the regulation and CMU's page do.
+
+  Open questions on boundaries: -1 day assumes "before the end date" excludes
+  the end date itself; +59 applies SEVP's OPT day-counting to the STEM 60 days,
+  which no source states directly. Both are the conservative reading.
+
+  opt_ead_end_date is an event anchor, not a profile field: the profile does
+  not yet store OPT dates.

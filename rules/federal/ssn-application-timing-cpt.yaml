@@ -1,0 +1,32 @@
+id: ssn-application-timing-cpt
+title: When you can apply for an SSN on CPT
+summary: >-
+  If you need a Social Security Number for a CPT job, you can apply up to 30
+  days before the CPT start date on your I-20. You only ever get one SSN; if
+  you already have one, you don't apply again.
+task: Apply for a Social Security Number
+authority: federal
+school: null
+applies_to: []
+when:
+  phase: [in_program]
+computation:
+  type: window
+  opens_latest_of:
+    - { from: cpt_start_date, offset: { days: -30 } }
+sources:
+  - source_id: cmu-ssn
+    source_url: https://www.cmu.edu/oie/employment/resources/apply-for-ssn.html
+    supports: CPT students may apply up to 30 days before the start date on the CPT I-20.
+effective_date: null
+verified_on: null
+status: draft
+notes: >-
+  Matches CMU OIE webinar, 2026-09-25. The webinar also covered academic
+  training, which is J-1 and out of scope.
+
+  SSN rules are the Social Security Administration's; no SSA page is in
+  sources.yaml yet, so the only monitored citation is CMU's page.
+
+  The app does not record whether the student already has an SSN; the UI
+  should let them dismiss this task.

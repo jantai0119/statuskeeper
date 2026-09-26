@@ -1,0 +1,34 @@
+id: opt-uscis-processing-time
+title: How long USCIS takes to decide OPT and STEM OPT
+summary: >-
+  USCIS usually takes about 3 to 5 months to decide an OPT or STEM OPT
+  application. Premium processing, for an extra fee, takes about 30 business
+  days (around 6 weeks), plus mailing time. You cannot start working on OPT
+  until the start date on the approved card.
+task: Plan for USCIS processing time when choosing when to file
+authority: federal
+school: null
+applies_to: []
+when:
+  phase: [in_program, after_program_end]
+computation:
+  type: guidance
+sources: []
+effective_date: null
+verified_on: null
+status: needs_verification
+notes: >-
+  Source: CMU OIE webinar, 2026-09-25 (3–5 months standard; ~30 business
+  days premium, not counting mail).
+
+  Conflict: CMU's written OPT page (cmu-opt-overview), fetched 2026-09-25,
+  says authorization "can take one to two months". The two CMU sources
+  disagree by a factor of about three. The authoritative figure is USCIS's
+  own published processing times, which is not a monitored source yet; add
+  it and resolve this before activating.
+
+  Guidance only, on purpose: processing time is an estimate, so it must not
+  become a computed date. The engine may later show it as a range next to
+  the filing window.
+
+  Premium processing fee amount deliberately not stated.

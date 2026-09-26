@@ -1,0 +1,58 @@
+id: opt-post-completion-filing-window
+title: Post-completion OPT filing window
+summary: >-
+  You can file Form I-765 for post-completion OPT from 90 days before your
+  program end date until 60 days after it. Your school must recommend OPT in
+  SEVIS first, and USCIS must receive your application within 30 days of that
+  recommendation. Whichever limit comes first is your real deadline.
+task: File Form I-765 for post-completion OPT
+authority: federal
+school: null
+applies_to: [program_end_date]
+when:
+  phase: [in_program, after_program_end]
+computation:
+  type: window
+  opens_latest_of:
+    - { from: program_end_date, offset: { days: -90 } }
+    - { from: dso_opt_recommendation, offset: { days: 0 } }
+  closes_earliest_of:
+    - { from: program_end_date, offset: { days: 60 } }
+    # SEVP counts the recommendation date as day 1 and day 30 as the last day
+    # USCIS may receive the application, hence +29.
+    - { from: dso_opt_recommendation, offset: { days: 29 } }
+sources:
+  - source_id: uscis-i765
+    source_url: https://www.uscis.gov/i-765
+    supports: >-
+      (c)(3)(B) window: up to 90 days before, no later than 60 days after the
+      program end date; file within 30 days of the DSO recommendation.
+  - source_id: ecfr-8cfr-214-2-pre-ds-rule
+    source_url: https://www.ecfr.gov/on/2026-09-01/title-8/chapter-I/subchapter-B/part-214/subpart-A/section-214.2#p-214.2(f)(11)(i)(B)(2)
+    supports: The regulation text for the same window, as it stood before the enjoined D/S rule.
+  - source_id: sevp-opt
+    source_url: https://studyinthestates.dhs.gov/sevis-help-hub/student-records/fm-student-employment/f-1-optional-practical-training-opt
+    supports: >-
+      Applications filed before the DSO recommendation, or received after day
+      30 of it, are denied; the day-1-to-day-30 counting.
+effective_date: null
+verified_on: null
+status: draft
+notes: >-
+  effective_date is null: no fetched source states when the 90/60-day text took
+  effect. verified_on is null: written from fetched sources on 2026-09-25, not
+  yet checked by a human.
+
+  Pending (watch item, never applied here): the enjoined D/S final rule would
+  change the closing limit from 60 to 30 days after program end. Current eCFR
+  already shows the 30-day text; USCIS says it follows the previous rule while
+  the injunction stands. See pending_changes on uscis-i765 and
+  ecfr-8cfr-214-2-pre-ds-rule.
+
+  Open question: the sources don't say whether "90 days before" and "60 days
+  after" count the program end date itself. The offsets use the literal
+  numbers; the UI should show the window conservatively.
+
+  The CMU layer adds process steps (OPT Canvas course, e-Form, advisor form)
+  and the Canvas cutoff about 3 months after graduation; those belong in a
+  CMU rule that refines this one.

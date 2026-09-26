@@ -1,0 +1,46 @@
+id: cpt-one-academic-year
+title: CPT requires one full academic year first
+summary: >-
+  You can normally start CPT only after being enrolled full-time in the U.S.
+  for one full academic year (two full semesters). Graduate programs that
+  require an internship right away, in the first year, are exempt; if yours
+  is one, this waiting period doesn't apply to you.
+task: Complete one full academic year before starting CPT
+authority: federal
+school: null
+applies_to: [program_requires_first_year_internship]
+when:
+  phase: [in_program]
+  # The exception, as a condition: students whose program requires a
+  # first-year internship never see this rule.
+  program_requires_first_year_internship: false
+computation:
+  type: guidance
+sources:
+  - source_id: ecfr-8cfr-214-2-pre-ds-rule
+    source_url: https://www.ecfr.gov/on/2026-09-01/title-8/chapter-I/subchapter-B/part-214/subpart-A/section-214.2#p-214.2(f)(10)(i)
+    supports: >-
+      One academic year of full-time enrollment before CPT; exception for
+      graduate studies that require immediate participation in CPT.
+  - source_id: sevp-cpt
+    source_url: https://studyinthestates.dhs.gov/sevis-help-hub/student-records/fm-student-employment/f-1-curricular-practical-training-cpt
+    supports: Full academic year requirement and the exception for graduate programs that require earlier training.
+effective_date: null
+verified_on: null
+status: draft
+notes: >-
+  Why guidance and not a date: "one full academic year" ends with the second
+  full-time term, which depends on the academic calendar, not a fixed offset
+  from program_start_date. Once the engine reads the CMU calendar feed this
+  can become a dated rule.
+
+  Wording of the exception differs by source. Regulation: "graduate studies
+  that require immediate participation in curricular practical training".
+  SEVP: "programs require earlier training". CMU OIE webinar, 2026-09-25:
+  graduate programs "that require an internship in the student's first year".
+  The profile question should follow the regulation's meaning: the program
+  requires it, not merely allows it.
+
+  Separate from this rule: SEVP's August 2026 standard that the internship
+  must be a graduation requirement for every student in the program (see
+  sevp-cpt and cmu-news). That is its own future rule.

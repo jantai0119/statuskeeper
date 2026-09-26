@@ -1,0 +1,36 @@
+id: stem-opt-employment-requirements
+title: STEM OPT employer and job requirements
+summary: >-
+  To get and keep the STEM OPT extension, your employer must be enrolled in
+  E-Verify, you and your employer must sign a Form I-983 training plan, and
+  the job must be paid, at least 20 hours a week, and related to your STEM
+  degree. Self-employment is not allowed on STEM OPT, even though it can be
+  on regular OPT.
+task: Confirm your employer and job qualify for STEM OPT
+authority: federal
+school: null
+applies_to: [stem_designated]
+when:
+  phase: [in_program, after_program_end]
+  stem_designated: true
+computation:
+  type: guidance
+sources:
+  - source_id: ecfr-8cfr-214-2-pre-ds-rule
+    source_url: https://www.ecfr.gov/on/2026-09-01/title-8/chapter-I/subchapter-B/part-214/subpart-A/section-214.2#p-214.2(f)(10)(ii)(C)
+    supports: Employer enrolled in and in good standing with E-Verify; Form I-983 training plan; at least 20 hours per week.
+  - source_id: cmu-stem-opt
+    source_url: https://www.cmu.edu/oie/employment/f1-students/opt-stem-opt-extension/opt-stem-extension.html
+    supports: E-Verify employer; paid; at least 20 hours per week; related to the STEM degree; I-983; no self-employment.
+effective_date: null
+verified_on: null
+status: draft
+notes: >-
+  Also stated at CMU OIE webinar, 2026-09-25, as general federal
+  requirements. The self-employment exclusion is on cmu-stem-opt and in the
+  webinar; I did not find it stated in the regulation paragraphs fetched.
+
+  Deliberately says nothing about whether any particular employer qualifies.
+
+  Shown from in_program on purpose: STEM students need to know this before
+  accepting a post-completion OPT job they hope to extend.

@@ -1,0 +1,39 @@
+id: ssn-application-timing-opt
+title: When you can apply for an SSN on OPT
+summary: >-
+  If you need a Social Security Number for OPT work, you can apply up to 30
+  days before the start date on your OPT card (EAD). You only ever get one
+  SSN; if you already have one, you don't apply again.
+task: Apply for a Social Security Number
+authority: federal
+school: null
+applies_to: []
+when:
+  phase: [in_program, after_program_end]
+computation:
+  type: window
+  opens_latest_of:
+    - { from: opt_ead_start_date, offset: { days: -30 } }
+sources:
+  - source_id: cmu-ssn
+    source_url: https://www.cmu.edu/oie/employment/resources/apply-for-ssn.html
+    supports: >-
+      OPT is a basis for SSN eligibility. Its timing text disagrees with this
+      rule; see notes.
+effective_date: null
+verified_on: null
+status: needs_verification
+notes: >-
+  The 30-days-before-EAD-start timing is from CMU OIE webinar, 2026-09-25,
+  which the maintainer accepted as resolving the ambiguity flagged in
+  sources.yaml (cmu-ssn).
+
+  Still open: CMU's live written page says something different. Exact text,
+  as fetched 2026-09-25: "OPT – only from the start date on approved OPT EAD
+  (you can apply when you submit your OPT application to USCIS)." The webinar
+  and the page are from the same office and disagree, and the page is what
+  the watcher monitors. Until the page is corrected, or an SSA source
+  confirms the 30 days, the next scan will keep flagging the conflict.
+
+  Cannot be active yet: effective_date is unknown and verified_on is a human
+  sign-off.

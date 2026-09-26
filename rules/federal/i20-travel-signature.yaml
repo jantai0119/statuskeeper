@@ -1,0 +1,44 @@
+id: i20-travel-signature
+title: I-20 travel signature validity
+summary: >-
+  To come back into the U.S. after a trip abroad of five months or less, your
+  I-20 needs a travel signature from your school's international office (DSO)
+  that is less than a year old. Check that your last signature will still be
+  under a year old on the day you return, not just the day you leave.
+task: Get a new I-20 travel signature before your trip
+authority: federal
+school: null
+applies_to: [last_travel_signature_date]
+when:
+  phase: [in_program]
+computation:
+  type: validity
+  valid_until: { from: last_travel_signature_date, offset: { months: 12 } }
+  must_be_valid_on: planned_reentry
+sources:
+  - source_id: sits-travel
+    source_url: https://studyinthestates.dhs.gov/students/study/traveling-as-an-f-or-m-student
+    supports: DSO signature on the I-20 within the last year; absence of no more than 5 months.
+  - source_id: ecfr-8cfr-214-2-pre-ds-rule
+    source_url: https://www.ecfr.gov/on/2026-09-01/title-8/chapter-I/subchapter-B/part-214/subpart-A/section-214.2#p-214.2(f)(4)
+    supports: Readmission after an absence of five months or less requires an I-20 properly endorsed for reentry.
+effective_date: null
+verified_on: null
+status: draft
+notes: >-
+  The regulation ((f)(4)) says only "properly endorsed" and states no validity
+  period. The one-year figure comes from SEVP's student guidance (sits-travel),
+  which does not say what the year is measured from. This rule checks validity
+  on the re-entry date, the conservative reading and the one CMU states
+  explicitly (see cmu-i20-travel-signature-request).
+
+  Scope: students still in their program. On post-completion OPT the
+  regulation ((f)(13)(ii)) requires an endorsement within six months instead;
+  that will be a separate rule with phase after_program_end, because being on
+  OPT is not derivable from the profile alone.
+
+  The five-month absence limit is a trip-length check, not a date computed
+  from the profile. It belongs in a separate rule once trips are modelled.
+
+  effective_date is null: no fetched source states it. verified_on is null:
+  not yet checked by a human.

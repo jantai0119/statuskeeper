@@ -1,0 +1,43 @@
+id: cmu-i20-travel-signature-request
+title: Request a CMU travel signature in time
+summary: >-
+  At CMU, your I-20 must be signed within 12 months of the date you re-enter
+  the U.S. Request a new signature through the "I-20 Signature Request E-Form"
+  in the MyOIE Portal. OIE takes five business days to process it, so submit
+  the request at least five business days before you leave.
+task: Request an I-20 travel signature in MyOIE
+authority: school
+school: cmu
+refines: [i20-travel-signature]
+applies_to: [last_travel_signature_date]
+when:
+  phase: [in_program]
+computation:
+  type: deadline
+  due: { from: planned_departure, offset: { business_days: -5 } }
+sources:
+  - source_id: cmu-travel-f1
+    source_url: https://www.cmu.edu/oie/travel/documents/f1-and-j1-students/index.html
+    supports: >-
+      Signature within 12 months of the re-entry date; request via the I-20
+      Signature Request E-Form in MyOIE; five business days processing.
+  - source_id: sits-travel
+    source_url: https://studyinthestates.dhs.gov/students/study/traveling-as-an-f-or-m-student
+    supports: The signature should be in place before you travel abroad (the anchor for this deadline).
+effective_date: null
+verified_on: null
+status: draft
+notes: >-
+  Applies only when i20-travel-signature finds the current signature will not
+  be valid on the planned re-entry date.
+
+  CMU's page gives the processing time but does not itself say the request
+  must be done before departure; the departure anchor comes from the federal
+  guidance (sits-travel). Five business days is OIE's stated processing time,
+  not a guarantee; university holidays and closures are not modelled.
+
+  CMU students on OPT use a different e-Form (Limited Services) and a
+  six-month validity; that belongs with the future federal OPT travel rule.
+
+  effective_date is null: CMU pages show no dates. verified_on is null: not
+  yet checked by a human.
